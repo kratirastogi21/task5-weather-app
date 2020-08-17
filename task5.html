@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Weather App</title>
+  <style>
+    body {
+      background-image: url('bg4.png');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+
+    }
+
+    .searchinputbox {
+      border: thin;
+      padding: 20px;
+      margin: 20px;
+    }
+
+
+    .button {
+      background-color: rgb(32, 201, 178);
+      border-radius: 5px;
+      border: black solid;
+      color: cornsilk;
+      padding: 15px 32px;
+      margin: 10px;
+      text-align: center;
+      display: inline-block;
+      font-size: 15px;
+    }
+
+    .button:hover {
+      color: rgb(22, 21, 21);
+      background-color: hotpink;
+    }
+
+    #temp {
+      font: bold 100px serif;
+
+    }
+
+    #desc {
+      font-size: 25px;
+      text-transform: uppercase;
+      color: rgb(202, 90, 152);
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <center>
+    <div class="card">
+      <div class="container">
+        <div class="searchinputbox input-lg ">
+
+          <input value="" type="text" id="city" placeholder="Enter City Name" />
+        </div>
+
+        <button class="button " onclick="getWeather()">Fetch Weather</button>
+        <br>
+        <img src="" id="icon" />
+        <div style="font:black"> <b>Current Temperature is</b> <br><span id="temp"></span>
+          <span><sup>&deg;</sup>C</span>
+        </div>
+        <div id="desc">having, <span id="description"></span>
+        </div>
+        <div style="color:rgb(223, 102, 22)"><i>Feels Like </i> <span id="feels"></span> &deg;C
+        </div>
+
+        <div style="color:black"><i>Humidity : </i><span id="humidity"> </span>
+
+        </div>
+        <div style="color:brown"><i>Pressure : </i><span id="pressure"></span>
+
+        </div>
+
+        <div style="color:rgb(54, 12, 240)">Wind Speed : <span id="wind"></span>
+        </div>
+      </div>
+    </div>
+
+
+  </center>
+
+  <script>
+    console.time("fetch weather");
+    async function getWeather() {
+      const CityName = document.getElementById("city").value;
+      alert("Fetch Data for: " + CityName);
+      let Weatherdetails =
+        "https://api.openweathermap.org/data/2.5/weather?q=" +
+        CityName +
+        ",in&units=metric&appid=ee8b157b0525f8ef679fab898f0843cc";
+
+      const response = await fetch(Weatherdetails);
+      const data = await response.json();
+      console.clear();
+      console.log(data);
+      console.log(data.main.temp);
+      const icon = data.weather[0].icon;
+      let weathericon = "https://openweathermap.org/img/w/" + icon + ".png";
+      console.log(weathericon);
+      document.getElementById("icon").src = weathericon;
+      document.getElementById("temp").textContent = data.main.temp;
+      document.getElementById("pressure").textContent = data.main.pressure + "hpa";
+      document.getElementById("feels").textContent = data.main.feels_like;
+      document.getElementById("humidity").textContent = data.main.humidity;
+
+
+      document.getElementById("wind").textContent = data.wind.speed + "m/sec";
+      ;
+      document.getElementById("description").textContent = data.weather[0].description;
+
+
+    }
+    console.timeEnd("fetch weather");
+  </script>
+</body>
+
+</html>
